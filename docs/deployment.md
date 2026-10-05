@@ -34,7 +34,7 @@ After image seeding, the complete plan was regenerated: **42 remaining resources
 
 Application DNS: add CNAME `finzla` under `kunlekush.name.ng`, targeting `finzla-development-1257270431.eu-west-2.elb.amazonaws.com`, TTL 300. This is separate from the ACM renewal record. Application DNS and public end-to-end checks remain pending.
 
-The SNS email subscription is `PendingConfirmation`: the owner must click the AWS confirmation link delivered to `olakunle.kushehin@outlook.com` before alarm emails can arrive.
+The SNS email subscription for `olakunle.kushehin@outlook.com` is confirmed, verified through the AWS API. Alarm email delivery has not been tested.
 
 Initial live HTTPS `/health` returned HTTP 200 and `{"status": "ok"}` with the correct hostname and certificate verification, using curl `--connect-to` to reach the ALB while public DNS is pending. Both targets are healthy in eu-west-2a and eu-west-2b, and the ECS services-stable waiter passed. `/version` returned the expected initial commit SHA and `development` environment.
 
