@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.terraform/
+*.tfstate*
+*.tfplan
+*.auto.tfvars
+*.backend.hcl
+.env
+.venv/
+
+.trivy-cache/
+
+.deployment/

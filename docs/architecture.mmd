@@ -1,0 +1,11 @@
+flowchart LR
+    Internet -->|HTTPS 443; ACM TLS| ALB[Public ALB across 2 AZs]
+    ALB -->|HTTP 8080; ALB SG only| ECS[Private ECS Fargate tasks across 2 AZs]
+    ECS -->|HTTPS private endpoints| ECR[ECR API and Docker]
+    ECS -->|HTTPS gateway endpoint| S3[ECR image layers in S3]
+    ECS -->|stdout via private endpoint| Logs[CloudWatch Logs]
+    ALB --> Metrics[CloudWatch metrics and alarms]
+    Metrics --> SNS[SNS on-call email]
+    GitHub -->|OIDC exact repository + environment| IAM[Environment deployment role]
+    IAM --> ECR
+    IAM -->|Register revision and update one service| ECS

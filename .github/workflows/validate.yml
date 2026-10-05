@@ -1,0 +1,61 @@
+name: Validate pull request
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.13'
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: '1.15.9'
+      - run: python -m unittest discover -s tests -v
+      - run: pip install bandit==1.8.6 && bandit -r app -s B104
+      - run: terraform -chdir=infra fmt -check -recursive
+      - run: terraform -chdir=infra init -backend=false -input=false -lockfile=readonly
+      - run: terraform -chdir=infra validate
+      - run: terraform -chdir=infra test -no-color
+      - run: terraform -chdir=bootstrap fmt -check
+      - run: terraform -chdir=bootstrap init -backend=false -input=false -lockfile=readonly
+      - run: terraform -chdir=bootstrap validate
+      - run: terraform -chdir=bootstrap test -no-color
+      - run: docker build --build-arg APP_VERSION=${{ github.sha }} -t finzla:check .
+      - name: Scan image (HIGH and CRITICAL vulnerabilities fail)
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/aquasecurity/trivy:0.70.0@sha256:85e87be1a96459c38a4eea47dc64eb2d342bb14cd4b4cef96adcf6ff03378b7c image --no-progress --scanners vuln --exit-code 1 --severity HIGH,CRITICAL finzla:check
+  plan:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: terraform-plan
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        with:
+          terraform_version: '1.15.9'
+      - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+        with:
+          role-to-assume: ${{ vars.PLAN_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: finzla-plan-${{ github.run_id }}
+      - name: Plan development only (no apply permissions)
+        env:
+          STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+          TF_VAR_certificate_arn: ${{ vars.CERTIFICATE_ARN }}
+          TF_VAR_hostname: ${{ vars.HOSTNAME }}
+          TF_VAR_image_uri: ${{ vars.INITIAL_IMAGE_URI }}
+          TF_VAR_github_oidc_provider_arn: ${{ vars.OIDC_PROVIDER_ARN }}
+          TF_VAR_github_deploy_subject: ${{ vars.DEPLOY_SUBJECT }}
+          TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }}
+        run: |
+          terraform -chdir=infra init -input=false -lockfile=readonly -backend-config="bucket=$STATE_BUCKET" -backend-config="key=development/terraform.tfstate" -backend-config="region=$AWS_REGION" -backend-config="encrypt=true" -backend-config="use_lockfile=true" -backend-config="workspace_key_prefix=development/workspaces"
+          terraform -chdir=infra plan -input=false -lock-timeout=5m -var-file=environments/development.tfvars
