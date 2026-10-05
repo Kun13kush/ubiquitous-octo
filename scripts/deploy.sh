@@ -4,6 +4,8 @@ set -Eeuo pipefail
 [[ "$BASE_URL" == https://* ]] || { echo "BASE_URL must use HTTPS" >&2; exit 1; }
 work_dir=$(mktemp -d)
 trap 'rm -rf "$work_dir"' EXIT
+export DOCKER_CONFIG="$work_dir/docker-auth"
+mkdir -m 700 "$DOCKER_CONFIG"
 registry="${ECR_REPOSITORY%%/*}"
 repository="${ECR_REPOSITORY#*/}"
 tag="${RELEASE}-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}"

@@ -1,6 +1,6 @@
 # Local validation evidence
 
-Validated on 5–6 October 2026 (Africa/Lagos) in Ubuntu WSL. This report records observed results; it is not evidence of an AWS deployment. The assessment attachment was a text export and was reviewed before implementation.
+Validated on 5–6 October 2026 (Africa/Lagos) in Ubuntu WSL. This report records observed results; it records the initial local build phase. Subsequent live AWS and GitHub results are in [deployment.md](deployment.md). The assessment attachment was a text export and was reviewed before implementation.
 
 | Check | Observed result |
 |---|---|
@@ -64,4 +64,4 @@ The scanner emitted warnings about third-party SBOM accuracy and its built-in EO
 - GitHub Actions execution and action download resolution, environment approval enforcement, CODEOWNERS, branch protection and fork/trusted-PR behavior. No repository was created remotely or pushed.
 - Production release verification or recovery under runner cancellation, IAM failure or complete lack of healthy tasks. Rollback logic was exercised with mocks only.
 
-The README supplies the remaining environment inputs and setup steps. **No AWS deployment was attempted, and no AWS credentials were inspected or added.**
+The README supplies the remaining environment inputs and setup steps. **At the initial local-build phase, no AWS deployment was attempted and no credentials were added to source. The user subsequently authorized development deployment; see [deployment.md](deployment.md) for live evidence and remaining untested items.**

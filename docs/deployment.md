@@ -32,12 +32,16 @@ GitHub environments are configured: development and production permit only main;
 
 After image seeding, the complete plan was regenerated: **42 remaining resources to create, no changes/deletes**, with the real image digest and two private tasks.
 
-Application DNS: add CNAME `finzla` under `kunlekush.name.ng`, targeting `finzla-development-1257270431.eu-west-2.elb.amazonaws.com`, TTL 300. This is separate from the ACM renewal record. Application DNS and public end-to-end checks remain pending.
+Application DNS: add CNAME `finzla` under `kunlekush.name.ng`, targeting `finzla-development-1257270431.eu-west-2.elb.amazonaws.com`, TTL 300. This is separate from the ACM renewal record. Both authoritative nameservers return the correct application CNAME, and normal public DNS HTTPS `/health` returns HTTP 200.
 
 The SNS email subscription for `olakunle.kushehin@outlook.com` is confirmed, verified through the AWS API. Alarm email delivery has not been tested.
 
 Initial live HTTPS `/health` returned HTTP 200 and `{"status": "ok"}` with the correct hostname and certificate verification, using curl `--connect-to` to reach the ALB while public DNS is pending. Both targets are healthy in eu-west-2a and eu-west-2b, and the ECS services-stable waiter passed. `/version` returned the expected initial commit SHA and `development` environment.
 
-Still untested: normal public DNS routing (application CNAME pending), GitHub Actions OIDC deployment and rollback execution, production deployment, injected application/ALB failures, and delivery of confirmed SNS alert emails. Repository publication and the first pipeline run follow once public DNS resolves, so the workflow can verify the public endpoint.
+Repository published. Initial full CI validation passed: https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37391277450. OIDC authentication and ECR push passed in the first deployment, which stopped before service mutation because DescribeTaskDefinition was incorrectly scoped to an ARN. AWS requires Resource `*` for that read action; the corrected policy additionally restricts reads to the environment region. Existing service stayed healthy. Automatic approval review rejected both the unrestricted and region-limited read-policy corrections because they allow reading other task definitions. The user explicitly approved region-limited task-definition read access; the reviewed single-policy correction is now being applied. Corrected deployment verification is pending.
+
+Still untested: live rollback execution, production deployment, injected application/ALB failures, confirmed SNS email delivery and the protected PR plan job. Production requires independent review and has no AWS resources deployed.
 
 Post-apply full Terraform plan exited 0: no changes, infrastructure matches configuration.
+
+CloudWatch log streams exist for both healthy tasks. AWS EC2 API confirms both task ENIs have private addresses only and no public association. Production environment protections were verified: main-only deployment branch, reviewer required, prevent_self_review=true and can_admins_bypass=false.
