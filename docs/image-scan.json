@@ -3,10 +3,10 @@
   "Trivy": {
     "Version": "0.70.0"
   },
-  "ReportID": "01a10e4c-ffb7-71fc-9e7d-ca9486565c7b",
-  "CreatedAt": "2026-10-05T23:01:29.655133501Z",
-  "ArtifactID": "sha256:d466807f856d0d0dcd01711542c5d8c99c4c74b8662765a571b9e347295dda01",
-  "ArtifactName": "finzla:local",
+  "ReportID": "01a10e70-b4c1-7687-b458-f1da3b147dd2",
+  "CreatedAt": "2026-10-05T23:40:29.761431719Z",
+  "ArtifactID": "sha256:68a52251bdb72c492d958140c324762c39310ad03e7642eb32f812793bd814af",
+  "ArtifactName": "finzla:release",
   "ArtifactType": "container_image",
   "Metadata": {
     "Size": 54291968,
@@ -14,27 +14,27 @@
       "Family": "alpine",
       "Name": "3.24.2"
     },
-    "ImageID": "sha256:80a9f83dc387f4539474be8a0b8d30b265372ad1df2057d1eed22e3199810681",
+    "ImageID": "sha256:c007562a5931f75a6b5d91a3d7d773e19e23c4d1bbe94b60c8c78cd7ad4b249f",
     "DiffIDs": [
       "sha256:74d97c428c51a828f9051a7a40a53ff1fc99e54fc30323ce36760701b0b7f711",
       "sha256:ebc25a7288717fe6abb2c2f4fa2ee06b6f93926f76a88ba5ac61338d2c22a42f",
       "sha256:4b3c5e4553e10240e2f6e1d7402485ce47539f9b542e674519ce6fb605069077",
       "sha256:09b41e0a8d4591928175ed1ae0321de77ed2190f6f756a017ca50ca7518b2e32",
-      "sha256:bdb74ce96fecd4f1de3e85c36049dd56f36763308a9b6a351cc2f2a25a87781f",
-      "sha256:6f6bc384c30aa79fa63cbcf402a6bdb858dd6d0b9833fe4cab34769153302c5f",
-      "sha256:d06d8a62aca26bf01f038150914fb4565b38bfd304e3376430b149c14f36163a",
-      "sha256:5ec695101a86a3dc7e3d09c695dbde61c3370560ac0dae372049450d1be85a5f"
+      "sha256:73dfcee5d70c48fb5fa376b50a266261f0be908b8aab71435d2d68e84e457892",
+      "sha256:a5ad7d60acba68804a2308caa39c2e77aef02ce1c1e7f393a8bc3e3b815f8423",
+      "sha256:8c95ddc1d64f9dd8159357f1447fbaca55c662fcf506df9bc09346d8ee3cd89c",
+      "sha256:2a89f04658634598fee04a011dffe78f2a989f3f486de396695b92cbbff6dbeb"
     ],
     "RepoTags": [
-      "finzla:local"
+      "finzla:release"
     ],
     "RepoDigests": [
-      "finzla@sha256:80a9f83dc387f4539474be8a0b8d30b265372ad1df2057d1eed22e3199810681"
+      "finzla@sha256:c007562a5931f75a6b5d91a3d7d773e19e23c4d1bbe94b60c8c78cd7ad4b249f"
     ],
-    "Reference": "finzla:local",
+    "Reference": "finzla:release",
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2026-10-05T23:57:39.424717415+01:00",
+      "created": "2026-10-06T00:39:28.354275572+01:00",
       "history": [
         {
           "created": "2026-09-17T20:37:20Z",
@@ -93,57 +93,57 @@
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:38Z",
-          "created_by": "ARG APP_VERSION=local-validation",
+          "created": "2026-10-05T23:39:26Z",
+          "created_by": "ARG APP_VERSION=578a5267d90396d7ea6a6ea163ac1c91e660992a",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:38Z",
-          "created_by": "ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 APP_VERSION=local-validation APP_ENV=development PORT=8080",
+          "created": "2026-10-05T23:39:26Z",
+          "created_by": "ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 APP_VERSION=578a5267d90396d7ea6a6ea163ac1c91e660992a APP_ENV=development PORT=8080",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:38Z",
-          "created_by": "RUN |1 APP_VERSION=local-validation /bin/sh -c apk upgrade --no-cache # buildkit",
+          "created": "2026-10-05T23:39:26Z",
+          "created_by": "RUN |1 APP_VERSION=578a5267d90396d7ea6a6ea163ac1c91e660992a /bin/sh -c apk upgrade --no-cache # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-10-05T22:57:39Z",
-          "created_by": "RUN |1 APP_VERSION=local-validation /bin/sh -c python -c \"import pathlib, shutil, sysconfig; shutil.rmtree(sysconfig.get_path('purelib')); shutil.rmtree(pathlib.Path(sysconfig.get_path('stdlib')) / 'ensurepip')\" # buildkit",
+          "created": "2026-10-05T23:39:28Z",
+          "created_by": "RUN |1 APP_VERSION=578a5267d90396d7ea6a6ea163ac1c91e660992a /bin/sh -c python -c \"import pathlib, shutil, sysconfig; shutil.rmtree(sysconfig.get_path('purelib')); shutil.rmtree(pathlib.Path(sysconfig.get_path('stdlib')) / 'ensurepip')\" # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "WORKDIR /app",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "COPY --chown=10001:10001 app/server.py ./server.py # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "USER 10001:10001",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "EXPOSE [8080/tcp]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "HEALTHCHECK {Test:[CMD-SHELL python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)\"] Interval:15s Timeout:3s StartPeriod:10s StartInterval:0s Retries:3}",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-10-05T22:57:39Z",
+          "created": "2026-10-05T23:39:28Z",
           "created_by": "CMD [\"python\" \"server.py\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
@@ -157,10 +157,10 @@
           "sha256:ebc25a7288717fe6abb2c2f4fa2ee06b6f93926f76a88ba5ac61338d2c22a42f",
           "sha256:4b3c5e4553e10240e2f6e1d7402485ce47539f9b542e674519ce6fb605069077",
           "sha256:09b41e0a8d4591928175ed1ae0321de77ed2190f6f756a017ca50ca7518b2e32",
-          "sha256:bdb74ce96fecd4f1de3e85c36049dd56f36763308a9b6a351cc2f2a25a87781f",
-          "sha256:6f6bc384c30aa79fa63cbcf402a6bdb858dd6d0b9833fe4cab34769153302c5f",
-          "sha256:d06d8a62aca26bf01f038150914fb4565b38bfd304e3376430b149c14f36163a",
-          "sha256:5ec695101a86a3dc7e3d09c695dbde61c3370560ac0dae372049450d1be85a5f"
+          "sha256:73dfcee5d70c48fb5fa376b50a266261f0be908b8aab71435d2d68e84e457892",
+          "sha256:a5ad7d60acba68804a2308caa39c2e77aef02ce1c1e7f393a8bc3e3b815f8423",
+          "sha256:8c95ddc1d64f9dd8159357f1447fbaca55c662fcf506df9bc09346d8ee3cd89c",
+          "sha256:2a89f04658634598fee04a011dffe78f2a989f3f486de396695b92cbbff6dbeb"
         ]
       },
       "config": {
@@ -185,7 +185,7 @@
           "PYTHON_SHA256=f4b1bfb3c79b5bb11b8d228a12504163b4c0dab4d679828d8f5f26b6cb6ab35d",
           "PYTHONUNBUFFERED=1",
           "PYTHONDONTWRITEBYTECODE=1",
-          "APP_VERSION=local-validation",
+          "APP_VERSION=578a5267d90396d7ea6a6ea163ac1c91e660992a",
           "APP_ENV=development",
           "PORT=8080"
         ],
@@ -220,29 +220,29 @@
       },
       {
         "Size": 84480,
-        "Digest": "sha256:b0b624362fec75a31772165b1ba9cc675855a2035fa4278ecfc6a9a384135ef9",
-        "DiffID": "sha256:bdb74ce96fecd4f1de3e85c36049dd56f36763308a9b6a351cc2f2a25a87781f"
+        "Digest": "sha256:5da73b97d2286db1a440411ea44772cf19294b63e85bb7a58490750f48850fca",
+        "DiffID": "sha256:73dfcee5d70c48fb5fa376b50a266261f0be908b8aab71435d2d68e84e457892"
       },
       {
         "Size": 4096,
-        "Digest": "sha256:b8fb2522ecbd19c24459ff5fa8f9719457439cac3ce09346012575c76a51879b",
-        "DiffID": "sha256:6f6bc384c30aa79fa63cbcf402a6bdb858dd6d0b9833fe4cab34769153302c5f"
+        "Digest": "sha256:a57289c5eb807d97b0071f317208917e2f9996d6e04c6a0ea49ec779d61cced2",
+        "DiffID": "sha256:a5ad7d60acba68804a2308caa39c2e77aef02ce1c1e7f393a8bc3e3b815f8423"
       },
       {
         "Size": 1536,
-        "Digest": "sha256:7c57708c8b29f6488546f4d3891e008998aecd0c91df20b12009cb1238523ec5",
-        "DiffID": "sha256:d06d8a62aca26bf01f038150914fb4565b38bfd304e3376430b149c14f36163a"
+        "Digest": "sha256:ed08279a7a57db47f34067558a747a249c199f340603ed6b41e80a528e865f2a",
+        "DiffID": "sha256:8c95ddc1d64f9dd8159357f1447fbaca55c662fcf506df9bc09346d8ee3cd89c"
       },
       {
         "Size": 3584,
-        "Digest": "sha256:c5941eaa5e7697cb69cd691ac65459a2767eaa495d564a8a6115e8d37d726263",
-        "DiffID": "sha256:5ec695101a86a3dc7e3d09c695dbde61c3370560ac0dae372049450d1be85a5f"
+        "Digest": "sha256:663b9da19549f8f4d41e3c707a6165dd369bab49c46d10e89878b5a5a1886ee5",
+        "DiffID": "sha256:2a89f04658634598fee04a011dffe78f2a989f3f486de396695b92cbbff6dbeb"
       }
     ]
   },
   "Results": [
     {
-      "Target": "finzla:local (alpine 3.24.2)",
+      "Target": "finzla:release (alpine 3.24.2)",
       "Class": "os-pkgs",
       "Type": "alpine",
       "Packages": [
