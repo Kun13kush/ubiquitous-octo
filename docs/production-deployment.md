@@ -24,10 +24,20 @@ Production baseline estimate is another $95.52/month at 730 hours using the Lond
 
 ## Pending checks
 
-Full apply and seed validation passed: both ALB targets are healthy in eu-west-2a/eu-west-2b, the ECS stable waiter passed, and certificate-verified HTTPS using curl --connect-to returned the expected main revision with environment production. Public application DNS, GitHub production OIDC release, restored gate, post-release drift and production SNS email confirmation are pending. Load/failure/DR exercises, delivery of alarm emails and injected circuit-breaker recovery remain untested. Development's live rollback exercise does not demonstrate every production failure scenario.
+Full apply and seed validation passed: both ALB targets are healthy in eu-west-2a/eu-west-2b, the ECS stable waiter passed, and certificate-verified HTTPS using curl --connect-to returned the expected main revision with environment production. Public application DNS and the GitHub production OIDC release now pass; production approval protection has been restored. Production SNS email confirmation remains pending. Load/failure/DR exercises, delivery of alarm emails and injected circuit-breaker recovery remain untested. Development's live rollback exercise does not demonstrate every production failure scenario.
 
 Application CNAME: `finzla-prod.kunlekush.name.ng` -> `finzla-production-1427615191.eu-west-2.elb.amazonaws.com`, TTL 300.
 
 Post-apply full Terraform plan exited 0: no changes. AWS IAM simulation returned implicitDeny for development deployment role updating production and for production deployment role updating development. These are policy-simulator checks, not attempted live cross-environment mutations.
 
-First production workflow [37395863727](https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37395863727) is waiting for environment approval. The self-review exception has not been applied; public application DNS is required before approval so the release checks can pass. Production alert email subscription remains PendingConfirmation.
+First production workflow [37395863727](https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37395863727) completed successfully. Both authoritative nameservers now return the application CNAME and normal HTTPS /version serves the expected main commit with environment production. The one-time self-approval exception was applied only to approve this run, then restored immediately in a finally block. AWS/GitHub API verification confirms prevent_self_review=true and can_admins_bypass=false. The approved workflow completed successfully. Production alert email subscription remains PendingConfirmation.
+
+## Final release verification
+
+[Production GitHub deployment](https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37395863727) succeeded for main `89fd129ae3606b96f581527851df172704b111ba`: all 15 tests, Bandit, strict image scan, production OIDC authentication, ECR push, task revision registration, service update, bounded exact-release completion and five public health/version checks passed. Task definition `finzla-production:2` is the sole COMPLETED deployment with two running tasks. Public [health](https://finzla-prod.kunlekush.name.ng/health) returns status ok; [version](https://finzla-prod.kunlekush.name.ng/version) returns the main SHA above and environment production.
+
+Production self-review prevention and administrator-bypass prevention were restored immediately after approving this single run and verified through GitHub's API. Main protection was not relaxed. Future owner-triggered production releases still require an independent reviewer or another explicitly authorized exception.
+
+The production SNS subscription remains PendingConfirmation; click the separate AWS confirmation email before alarm notifications can arrive. No alarm email delivery or production failure/rollback injection was tested. The earlier development rollback exercise is recorded in the development report.
+
+Final post-release full Terraform plan exited 0: no changes. Both new production targets are healthy in separate availability zones, and development public /health remains successful.
