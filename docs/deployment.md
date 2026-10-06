@@ -40,7 +40,7 @@ Initial live HTTPS `/health` returned HTTP 200 and `{"status": "ok"}` with the c
 
 Repository published. Initial full CI validation passed: https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37391277450. OIDC authentication and ECR push passed in the first deployment, which stopped before service mutation because DescribeTaskDefinition was incorrectly scoped to an ARN. AWS requires Resource `*` for that read action; the corrected policy additionally restricts reads to the environment region. Existing service stayed healthy. Automatic approval review rejected both the unrestricted and region-limited read-policy corrections because they allow reading other task definitions. The user explicitly approved region-limited task-definition read access; the reviewed single-policy correction was applied successfully (one policy changed).
 
-Live workflow rollback was exercised successfully in run https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37391604138: the stable waiter returned while rolloutState was still IN_PROGRESS, the strict assertion rejected the release, and the handler restored revision 1 with a successful public health check. A bounded completion wait and five regression checks fix this race; all 15 Python tests pass locally. Corrected successful release verification remains pending.
+Live workflow rollback was exercised successfully in run https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37391604138: the stable waiter returned while rolloutState was still IN_PROGRESS, the strict assertion rejected the release, and the handler restored revision 1 with a successful public health check. A bounded completion wait and five regression checks fix this race; all 15 Python tests pass locally. The corrected release subsequently completed successfully; final evidence follows below.
 
 Still untested: production deployment, injected application/ALB failures, confirmed SNS email delivery and the protected PR plan job. Production requires independent review and has no AWS resources deployed.
 
@@ -49,3 +49,15 @@ Post-apply full Terraform plan exited 0: no changes, infrastructure matches conf
 CloudWatch log streams exist for both healthy tasks. AWS EC2 API confirms both task ENIs have private addresses only and no public association. Production environment protections were verified: main-only deployment branch, reviewer required, prevent_self_review=true and can_admins_bypass=false.
 
 Main branch protection is active: validate check required, strict up-to-date checks, code-owner review, one approval, last-push approval, admin enforcement and no force pushes/deletions. Changes require an independent reviewer; the owner cannot self-approve their own pull request.
+
+## Final verified release
+
+On 6 October 2026 (Africa/Lagos), main commit `c13885dcf44118cb33c421f2ca46d24d6cc9756a` passed [full GitHub validation](https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37392433704) and [OIDC application deployment](https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37392433623). The deployment executed ECR authentication/push, revision registration, scoped service update, ECS completion polling, and five verified public health/exact-version checks.
+
+Public endpoints: [health](https://finzla.kunlekush.name.ng/health) and [version](https://finzla.kunlekush.name.ng/version). Version reports the commit above and environment `development`. ECS task definition `finzla-development:3` is the sole completed deployment, with two running tasks and two healthy ALB targets across eu-west-2a/eu-west-2b.
+
+PR #1 merged after passing its required validate check using the explicitly user-approved one-time main review exception. Review protection was immediately restored and independently verified: one approval, code-owner review, last-push approval, admin enforcement and the required validate check are active. Production protections were never relaxed. A collaborator able to provide independent review is required for future protected changes and owner-triggered production deployments.
+
+Remaining untested: production deployment, circuit-breaker recovery from an injected unhealthy image, load/failure/DR exercises, delivery of SNS alarm emails, and the approval-gated PR Terraform plan runtime. The live workflow rollback path was exercised and verified; this does not prove recovery from every failure. No production infrastructure was created.
+
+Final full Terraform plan after the GitHub release exited 0: no changes. The pipeline-owned service revision does not create infrastructure drift.
