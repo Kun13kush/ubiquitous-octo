@@ -19,12 +19,29 @@ previous=$(aws ecs describe-services --cluster "$ECS_CLUSTER" --services "$ECS_S
 aws ecs describe-task-definition --task-definition "$previous" --query taskDefinition > "$work_dir/current.json"
 python3 scripts/render_task.py "$work_dir/current.json" "$ECR_REPOSITORY@$digest" > "$work_dir/new.json"
 next=$(aws ecs register-task-definition --cli-input-json "file://$work_dir/new.json" --query 'taskDefinition.taskDefinitionArn' --output text)
+# ECS services-stable can precede rolloutState=COMPLETED by several seconds.
+wait_release() {
+  local expected="$1" status attempt
+  aws ecs wait services-stable --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE" || return 1
+  for attempt in {1..24}; do
+    aws ecs describe-services --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE" > "$work_dir/service.json" || return 1
+    if python3 scripts/check_release.py "$work_dir/service.json" "$expected"; then
+      return 0
+    else
+      status=$?
+      [[ "$status" == 3 ]] || return "$status"
+    fi
+    sleep 5
+  done
+  echo "Timed out waiting for exact release completion: $expected" >&2
+  return 1
+}
 # Arm rollback before UpdateService: a timeout can occur after AWS accepted the change.
 rollback() {
   trap - ERR INT TERM
   echo "Release failed; restoring $previous" >&2
   if aws ecs update-service --cluster "$ECS_CLUSTER" --service "$ECS_SERVICE" --task-definition "$previous" > /dev/null &&
-     aws ecs wait services-stable --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE" &&
+     wait_release "$previous" &&
      [[ "$(aws ecs describe-services --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE" --query 'services[0].taskDefinition' --output text)" == "$previous" ]] &&
      curl --fail --silent --show-error --connect-timeout 5 --max-time 15 "$BASE_URL/health"; then
     echo "Previous task definition restored; investigate failed release." >&2
@@ -35,17 +52,7 @@ rollback() {
 }
 trap rollback ERR INT TERM
 aws ecs update-service --cluster "$ECS_CLUSTER" --service "$ECS_SERVICE" --task-definition "$next" > /dev/null
-aws ecs wait services-stable --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE"
-aws ecs describe-services --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE" > "$work_dir/service.json"
-python3 - "$work_dir/service.json" "$next" <<'CHECK'
-import json, sys
-service = json.load(open(sys.argv[1]))["services"][0]
-assert service["desiredCount"] >= 2, "Bootstrap service has no production capacity"
-assert service["runningCount"] == service["desiredCount"]
-assert len(service["deployments"]) == 1, "Old release still active"
-assert service["taskDefinition"] == sys.argv[2], "ECS rolled back; stable does not imply release success"
-assert service["deployments"][0]["rolloutState"] == "COMPLETED"
-CHECK
+wait_release "$next"
 # Verify the public TLS route and exact release, not merely that some task is healthy.
 for attempt in {1..5}; do
   curl --fail --silent --show-error --connect-timeout 5 --max-time 15 "$BASE_URL/health" > /dev/null
