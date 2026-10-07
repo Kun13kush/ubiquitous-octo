@@ -1,0 +1,6 @@
+tests/platform.tftest.hcl... in progress
+  run "secure_platform_plan"... pass
+tests/platform.tftest.hcl... tearing down
+tests/platform.tftest.hcl... pass
+
+Success! 1 passed, 0 failed.

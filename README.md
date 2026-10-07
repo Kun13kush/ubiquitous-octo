@@ -1,6 +1,6 @@
 # Finzla assessment platform
 
-A minimal Python service and AWS ECS Fargate platform built from the supplied Finzla Cloud & Platform Engineer assessment text. The attachment was a text export, not a PDF file; all requirements in that export were reviewed. Development is live at [finzla.kunlekush.name.ng](https://finzla.kunlekush.name.ng/health) in London; see [live deployment status](docs/deployment.md). Local evidence and outstanding checks from the initial assessment build are in [docs/validation.md](docs/validation.md).
+A minimal Python service and AWS ECS Fargate platform built from the supplied Finzla Cloud & Platform Engineer assessment text. The attachment was a text export, not a PDF file; all requirements in that export were reviewed. Both AWS environments were shut down on 6 October 2026 at the owner’s request. See [shutdown receipt](docs/shutdown.md); deployment records below are historical. Local evidence and outstanding checks from the initial assessment build are in [docs/validation.md](docs/validation.md).
 
 ## Application and local use
 
@@ -130,3 +130,7 @@ The two largest likely recurring cost drivers for this tiny workload are the six
 Before fintech production the top three improvements are: (1) stronger governance and data security: separate accounts, organization SCPs/boundaries, centralized CloudTrail, KMS key controls, secrets lifecycle, WAF/authentication and audited GitHub protections; (2) tested reliability: workload/readiness checks, canary or blue/green deployment with business alarms, autoscaling/load tests, and demonstrated recovery/DR targets; (3) operational assurance: synthetic probes, pager routing, retained audit/access logs, incident exercises and compliance-approved data/log retention. This submission is a complete assessment configuration and deployable handoff, not a claim of production certification.
 
 References: [ECS circuit breaker](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-circuit-breaker.html), [Terraform S3 backend and locking](https://developer.hashicorp.com/terraform/language/backend/s3), and [GitHub OIDC for AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws).
+
+## Assessment evidence
+
+Actual build output, Terraform validation and plans, successful GitHub Actions records, and historical live health verification are indexed in [docs/evidence/README.md](docs/evidence/README.md). AWS environments are shut down; these records do not imply current live service availability.

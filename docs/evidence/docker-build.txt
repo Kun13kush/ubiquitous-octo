@@ -1,0 +1,52 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 923B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+#2 DONE 2.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 76B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 58B done
+#4 DONE 0.0s
+
+#5 [1/5] FROM docker.io/library/python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+#5 resolve docker.io/library/python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a
+#5 resolve docker.io/library/python:3.13-alpine@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a 0.1s done
+#5 CACHED
+
+#6 [2/5] RUN apk upgrade --no-cache
+#6 8.358 (1/2) Upgrading zlib (1.3.2-r0 -> 1.3.2-r1)
+#6 8.529 (2/2) Upgrading tzdata (2026d-r0 -> 2026e-r0)
+#6 9.377 OK: 11.4 MiB in 29 packages
+#6 DONE 9.5s
+
+#7 [3/5] RUN python -c "import pathlib, shutil, sysconfig; shutil.rmtree(sysconfig.get_path('purelib')); shutil.rmtree(pathlib.Path(sysconfig.get_path('stdlib')) / 'ensurepip')"
+#7 DONE 1.3s
+
+#8 [4/5] WORKDIR /app
+#8 DONE 0.2s
+
+#9 [5/5] COPY --chown=10001:10001 app/server.py ./server.py
+#9 DONE 0.1s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 0.7s done
+#10 exporting manifest sha256:e20ef91f4172b1b9fc28f267281281be67d723bfc1c3a4c0f8395f068d688cdb 0.0s done
+#10 exporting config sha256:6464078f6252880b6e87ee10f024b091fd5d9bfaa019c14919aba1d4c870d132 0.0s done
+#10 exporting attestation manifest sha256:f3002432108205196d810647d811d95053d86ef4124c372257a1dd7ca29c550c
+#10 exporting attestation manifest sha256:f3002432108205196d810647d811d95053d86ef4124c372257a1dd7ca29c550c 0.0s done
+#10 exporting manifest list sha256:2f234f991b5d66b07714c04b911722b255460119ad3f41a1d1592d8866fb35e2 0.0s done
+#10 naming to docker.io/library/finzla:evidence done
+#10 unpacking to docker.io/library/finzla:evidence
+#10 unpacking to docker.io/library/finzla:evidence 0.4s done
+#10 DONE 1.4s
+
+Command exit code: 0

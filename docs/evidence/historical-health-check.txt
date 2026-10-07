@@ -1,0 +1,10 @@
+Historical production deployment verification, 6 October 2026 UTC
+Source: https://github.com/Kun13kush/ubiquitous-octo/actions/runs/37395863727
+
+2026-10-06T00:54:55.7918074Z Verified release 89fd129ae3606b96f581527851df172704b111ba (arn:aws:ecs:eu-west-2:732108543574:task-definition/finzla-production:2)
+
+The deploy script prints this only after ECS completion and five successful
+public HTTPS /health and exact /version checks (scripts/deploy.sh).
+The successful workflow step is also recorded in github-production-run.json.
+Response bodies were not printed by that script; they are not recreated here.
+Both environments were deleted later on 6 October; this is historical evidence.
